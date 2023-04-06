@@ -1,0 +1,81 @@
+// An implementation of a Training Record as an ArrayList
+package com.stir.cscu9t4practical1;
+
+
+
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+
+public class TrainingRecord {
+    private List<Entry> tr;
+    
+    public TrainingRecord() {
+        tr = new ArrayList<Entry>();
+    } //constructor
+    
+    // add a record to the list
+   public void addEntry(Entry e){
+       tr.add(e);    
+   } // addClass
+   
+// delete the entry of name day month and year
+   public String removeEntry(String n, int d, int m, int y) {
+       ListIterator<Entry> iter = tr.listIterator();
+       String result = "No entries found for deletion...";
+       while (iter.hasNext()) {
+           Entry current = iter.next();
+           if (current.getName().equals(n) && current.getDay()==d && current.getMonth()==m && current.getYear()==y) {
+               iter.remove();
+               result = "Entry has been successfully deleted.";
+           }
+       }
+       return result;
+   } // removeEntry
+   
+   // look up the entry of a given day and month
+   public String lookupEntry (int d, int m, int y) {
+       ListIterator<Entry> iter = tr.listIterator();
+       String result = "No entries found";
+       while (iter.hasNext()) {
+          Entry current = iter.next();
+          if (current.getDay()==d && current.getMonth()==m && current.getYear()==y) 
+             result = current.getEntry();
+            }
+       return result;
+   } // lookupEntry
+   public String lookUpAllEntries (int d, int m, int y) {
+	   ListIterator<Entry> iter = tr.listIterator();
+       String result = "No entries found...";
+       while (iter.hasNext()) {
+           Entry current = iter.next();
+           if (current.getDay()==d && current.getMonth()==m && current.getYear()==y) {
+               if (result.equals("No entries found...")){
+                   result = "";
+               }
+               result += current.getEntry();
+           }
+       }
+       return result;
+   } 
+   public String findAllByName(String name) {
+
+       String allName = tr.stream()
+               .filter(current -> current.getName().equalsIgnoreCase(name))
+               .map(Entry::getEntry)
+               .collect(Collectors.joining());//returning a String based on the condition in the filter
+
+       return allName.equals("") ? "No entries for the name given" : allName;//  if the result are not matching
+   }
+   
+   // Count the number of entries
+   public int getNumberOfEntries(){
+       return tr.size();
+   }
+   // Clear all entries
+   public void clearAllEntries(){
+       tr.clear();
+   }
+   
+} // TrainingRecord
